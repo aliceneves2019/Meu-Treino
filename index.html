@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#e91e79">
+<meta name="description" content="Meu Treino: treinos personalizados, cronômetro e evolução.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-512.png">
+<title>Meu Treino</title>
+<style>
+:root{--pink:#e91e79;--deep:#a91459;--pale:#fff0f7;--paler:#fff8fb;--ink:#442638;--muted:#896779;--line:#f5c9dd;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#fff4f9,#ffe3f0);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);padding-bottom:86px}
+header{background:linear-gradient(120deg,#f52b87,#c91569);color:white;padding:20px 18px 22px;border-radius:0 0 26px 26px;box-shadow:0 5px 18px #bd39744a}
+.top{display:flex;align-items:center;justify-content:space-between}.brand{font-size:25px;font-weight:850;letter-spacing:-.8px}.tag{font-size:12px;opacity:.9;margin-top:3px}.heart{font-size:28px}
+main{max-width:760px;margin:auto;padding:16px}.welcome{font-size:21px;font-weight:800;margin:4px 0}.sub{color:var(--muted);font-size:14px;margin:0 0 15px}
+.card{background:white;border:1px solid var(--line);border-radius:18px;padding:15px;margin:12px 0;box-shadow:0 5px 18px #a52b6010}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:var(--pale);border-radius:14px;padding:12px 8px;text-align:center}.stat b{display:block;color:var(--deep);font-size:18px}.stat span{font-size:11px;color:var(--muted)}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0 0 5px}.muted{color:var(--muted);font-size:13px}
+.dayrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.daybtn,.tabbtn,.action{border:0;border-radius:13px;padding:11px 9px;font-weight:750;background:#ffe2ef;color:var(--deep);cursor:pointer}.daybtn.active,.tabbtn.active,.action{background:var(--pink);color:white}
+.exercise{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #f8dfeb}.exercise:last-child{border:0}.exercise input{width:21px;height:21px;accent-color:var(--pink);margin-top:3px}.exmain{flex:1}.exmain small{display:block;color:var(--muted);margin-top:4px}.done .exmain strong{text-decoration:line-through;color:#9a8290}
+.pill{display:inline-block;border-radius:99px;background:#ffe8f2;color:#a91459;padding:5px 9px;font-size:11px;font-weight:700;margin:3px 3px 3px 0}
+button:focus,input:focus{outline:3px solid #f7a7cd;outline-offset:2px}
+.action{width:100%;font-size:15px;margin-top:8px}.secondary{background:#fff0f7;color:var(--deep);border:1px solid var(--line)}
+.timer{font-size:40px;font-weight:850;text-align:center;color:var(--deep);padding:12px}
+input[type=number],input[type=date],input[type=text]{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fffafd;color:var(--ink);margin:5px 0 10px}
+label{font-size:13px;font-weight:700}.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:center;gap:4px;padding:8px max(8px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));z-index:4}
+.tabbtn{flex:1;max-width:180px;background:transparent;color:#896779;font-size:12px;padding:10px 5px}.tabbtn.active{background:#ffe3ef;color:var(--deep)}
+.hidden{display:none!important}.notice{background:#fff8df;border:1px solid #f1dfa0;border-radius:12px;padding:11px;font-size:12px;color:#715a20;line-height:1.45}
+.progressbar{height:10px;background:#ffe4ef;border-radius:99px;overflow:hidden}.progressbar span{display:block;height:100%;background:var(--pink);width:0}
+.logitem{padding:10px 0;border-bottom:1px solid #f8dfeb;font-size:13px}
+@media(min-width:600px){main{padding:22px}.card{padding:19px}}
+</style>
+</head>
+<body>
+<header><div class="top"><div><div class="brand">Meu Treino <span>♡</span></div><div class="tag">Seu foco, sua evolução!</div></div><div class="heart">💗</div></div></header>
+<main>
+<section id="home">
+ <div class="welcome">Olá, menina forte! 💪</div><p class="sub">Um passo de cada vez. Sua constância faz a diferença.</p>
+ <div class="card"><div class="stats"><div class="stat"><b>3 dias</b><span>por semana</span></div><div class="stat"><b>Intermediário</b><span>seu nível</span></div><div class="stat"><b>Recomposição</b><span>seu objetivo</span></div></div></div>
+ <div class="card"><h2>Seu plano semanal</h2><div class="dayrow"><button class="daybtn active" data-day="0">Dia A</button><button class="daybtn" data-day="1">Dia B</button><button class="daybtn" data-day="2">Dia C</button></div><div id="workoutTitle" style="margin:13px 0 4px;font-weight:800"></div><div id="workoutFocus" class="muted"></div><div id="exerciseList"></div><div class="notice" style="margin-top:12px">Ajuste as cargas para terminar cada série com boa técnica e ainda conseguir cerca de 1–3 repetições. Se sentir dor aguda, pare o exercício.</div><button class="action" id="finishWorkout">Concluir treino</button></div>
+ <div class="card"><h2>Progresso do treino</h2><div class="progressbar"><span id="weekProgress"></span></div><p class="muted" id="weekText">0 de 3 treinos concluídos nesta semana.</p></div>
+</section>
+<section id="progress" class="hidden">
+ <h2>Minha evolução 📈</h2>
+ <div class="card"><h3>Registrar medidas</h3><div class="fields"><div><label for="weight">Peso (kg)</label><input id="weight" type="number" min="1" max="400" step=".1" placeholder="Ex.: 68,5"></div><div><label for="waist">Cintura (cm)</label><input id="waist" type="number" min="1" max="250" step=".1" placeholder="Opcional"></div></div><label for="logdate">Data</label><input id="logdate" type="date"><button class="action" id="saveMeasure">Salvar registro</button></div>
+ <div class="card"><h3>Histórico</h3><div id="history" class="muted">Seus registros aparecerão aqui.</div></div>
+ <div class="card"><h3>Meta e constância</h3><p class="muted">Acompanhe também sua força, disposição, sono e como as roupas vestem. O peso sozinho não conta toda a história.</p></div>
+</section>
+<section id="timer" class="hidden">
+ <h2>Descanso entre séries ⏱️</h2><div class="card"><div class="muted" style="text-align:center">Cronômetro de descanso</div><div class="timer" id="clock">01:30</div><div class="dayrow"><button class="daybtn" data-seconds="60">60 s</button><button class="daybtn active" data-seconds="90">90 s</button><button class="daybtn" data-seconds="120">120 s</button></div><button class="action" id="startTimer">Iniciar</button><button class="action secondary" id="resetTimer">Zerar</button></div>
+</section>
+<section id="settings" class="hidden">
+ <h2>Configurações ⚙️</h2><div class="card"><h3>Seu perfil</h3><p class="muted">Objetivo: emagrecer e ganhar massa muscular<br>Frequência: 3 dias por semana<br>Nível: intermediário</p><label for="nickname">Como quer ser chamada?</label><input id="nickname" type="text" placeholder="Seu apelido"><button class="action" id="saveName">Salvar nome</button><p class="muted" id="nameMsg"></p></div>
+ <div class="card"><h3>Seus dados</h3><button class="action secondary" id="exportData">Exportar meus registros</button><button class="action secondary" id="clearData">Apagar registros salvos</button></div>
+ <div class="notice">Este app é uma ferramenta de organização, não substitui a orientação de um profissional de educação física ou nutricionista. Comece com cargas que controle bem, faça aquecimento e adapte os exercícios à sua condição e aos equipamentos disponíveis.</div>
+</section>
+</main>
+<nav><button class="tabbtn active" data-page="home">🏠 Início</button><button class="tabbtn" data-page="progress">📈 Evolução</button><button class="tabbtn" data-page="timer">⏱️ Descanso</button><button class="tabbtn" data-page="settings">⚙️ Perfil</button></nav>
+<script>
+const plans=[
+ {title:"Dia A — Pernas e glúteos",focus:"Ênfase em quadríceps e glúteos",items:[["Agachamento livre ou no smith","3 séries × 8–12 repetições","90–120 s"],["Leg press","3 × 10–12","90 s"],["Cadeira extensora","3 × 12–15","60–90 s"],["Elevação pélvica","3 × 8–12","90 s"],["Abdução de quadril","2 × 15–20","60 s"],["Panturrilha em pé ou sentada","3 × 12–15","60 s"]]},
+ {title:"Dia B — Parte superior e abdômen",focus:"Costas, peito, ombros, braços e core",items:[["Puxada na frente","3 × 8–12","90 s"],["Remada baixa","3 × 10–12","90 s"],["Supino máquina ou halteres","3 × 8–12","90 s"],["Desenvolvimento de ombros","2 × 10–12","60–90 s"],["Tríceps na polia","2 × 10–15","60 s"],["Rosca bíceps","2 × 10–15","60 s"],["Prancha","3 × 20–40 segundos","45–60 s"]]},
+ {title:"Dia C — Posterior, glúteos e corpo todo",focus:"Ênfase em posterior de coxa e condicionamento",items:[["Levantamento terra romeno com halteres","3 × 8–12","90 s"],["Mesa flexora","3 × 10–15","60–90 s"],["Afundo ou passada","3 × 8–10 por perna","90 s"],["Elevação pélvica","3 × 10–12","90 s"],["Remada unilateral","2 × 10–12","60–90 s"],["Caminhada inclinada ou bicicleta","10–15 minutos","—"]]}
+];
+const $=id=>document.getElementById(id);
+let selected=0, timerSeconds=90, timerLeft=90, timerId=null;
+const key="meuTreinoDataV1";
+let data=JSON.parse(localStorage.getItem(key)||'{"completed":{},"measures":[],"name":""}');
+function save(){localStorage.setItem(key,JSON.stringify(data))}
+function weekKey(){let d=new Date();let day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function renderPlan(){
+ const p=plans[selected];$("workoutTitle").textContent=p.title;$("workoutFocus").textContent=p.focus;
+ const done=data.completed[weekKey()]||[];
+ $("exerciseList").innerHTML=p.items.map((x,i)=>{let id=selected+"-"+i;return `<div class="exercise ${done.includes(id)?"done":""}"><input type="checkbox" data-ex="${id}" ${done.includes(id)?"checked":""} aria-label="Marcar ${x[0]} como concluído"><div class="exmain"><strong>${x[0]}</strong><small>${x[1]} · Descanso: ${x[2]}</small></div></div>`}).join("");
+ document.querySelectorAll("[data-ex]").forEach(el=>el.addEventListener("change",()=>{let list=data.completed[weekKey()]||[];if(el.checked&&!list.includes(el.dataset.ex))list.push(el.dataset.ex);if(!el.checked)list=list.filter(v=>v!==el.dataset.ex);data.completed[weekKey()]=list;save();renderPlan()}));
+ document.querySelectorAll("[data-day]").forEach(b=>b.classList.toggle("active",+b.dataset.day===selected));
+ updateWeek();
+}
+function updateWeek(){let count=(data.completed[weekKey()]||[]).filter(v=>v.endsWith("-done")).length;let completed=data.completed[weekKey()+"-sessions"]||[];count=completed.length;$("weekProgress").style.width=(count/3*100)+"%";$("weekText").textContent=count+" de 3 treinos concluídos nesta semana."}
+document.querySelectorAll("[data-day]").forEach(b=>b.addEventListener("click",()=>{selected=+b.dataset.day;renderPlan()}));
+$("finishWorkout").addEventListener("click",()=>{let arr=data.completed[weekKey()+"-sessions"]||[];if(!arr.includes(String(selected)))arr.push(String(selected));data.completed[weekKey()+"-sessions"]=arr;save();updateWeek();$("finishWorkout").textContent="Treino concluído! ✓";setTimeout(()=>$("finishWorkout").textContent="Concluir treino",1400)});
+function renderHistory(){$("history").innerHTML=data.measures.length?data.measures.slice().reverse().map(m=>`<div class="logitem"><b>${m.date}</b> — ${m.weight?m.weight+" kg":"Peso não informado"} ${m.waist?" · Cintura "+m.waist+" cm":""}</div>`).join(""):"Seus registros aparecerão aqui."}
+$("logdate").value=new Date().toISOString().slice(0,10);
+$("saveMeasure").addEventListener("click",()=>{let w=$("weight").value,wa=$("waist").value;if(!w&&!wa){alert("Informe pelo menos peso ou cintura.");return}data.measures.push({date:$("logdate").value,weight:w,waist:wa});save();$("weight").value="";$("waist").value="";renderHistory();alert("Registro salvo neste aparelho!")});
+function showPage(page){["home","progress","timer","settings"].forEach(p=>$(p).classList.toggle("hidden",p!==page));document.querySelectorAll(".tabbtn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));if(page==="progress")renderHistory()}
+document.querySelectorAll(".tabbtn").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+function displayClock(){let m=Math.floor(timerLeft/60),s=timerLeft%60;$("clock").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
+document.querySelectorAll("[data-seconds]").forEach(b=>b.addEventListener("click",()=>{timerSeconds=+b.dataset.seconds;timerLeft=timerSeconds;document.querySelectorAll("[data-seconds]").forEach(x=>x.classList.toggle("active",x===b));displayClock()}));
+$("startTimer").addEventListener("click",()=>{if(timerId){clearInterval(timerId);timerId=null;$("startTimer").textContent="Continuar";return}if(timerLeft<=0)timerLeft=timerSeconds;$("startTimer").textContent="Pausar";timerId=setInterval(()=>{timerLeft--;displayClock();if(timerLeft<=0){clearInterval(timerId);timerId=null;$("startTimer").textContent="Começar de novo";if(navigator.vibrate)navigator.vibrate([250,120,250]);}},1000)});
+$("resetTimer").addEventListener("click",()=>{clearInterval(timerId);timerId=null;timerLeft=timerSeconds;displayClock();$("startTimer").textContent="Iniciar"});
+$("saveName").addEventListener("click",()=>{data.name=$("nickname").value.trim();save();$("nameMsg").textContent=data.name?"Nome salvo! Oi, "+data.name+"!":"Nome removido."});
+$("nickname").value=data.name||"";
+$("exportData").addEventListener("click",()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="meu-treino-registros.json";a.click();URL.revokeObjectURL(a.href)});
+$("clearData").addEventListener("click",()=>{if(confirm("Apagar todos os registros salvos neste aparelho?")){data={completed:{},measures:[],name:""};save();renderPlan();renderHistory();$("nickname").value=""}});
+renderPlan();renderHistory();
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body></html>

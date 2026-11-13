@@ -1,0 +1,28 @@
+MEU TREINO — pacote gratuito para Android
+
+O que vem incluído:
+- Treino de 3 dias (nível intermediário) para força e condicionamento.
+- Marcação de exercícios e conclusão semanal.
+- Cronômetro de descanso.
+- Registro de peso e cintura salvo no próprio aparelho.
+- Exportação dos registros em JSON.
+- Visual rosa/pink e funcionamento offline após a primeira abertura.
+
+IMPORTANTE SOBRE INSTALAÇÃO:
+Este pacote é um aplicativo web instalável (PWA), não um APK nativo.
+Para aparecer como aplicativo instalável no Android, os arquivos precisam estar publicados em um endereço HTTPS.
+Depois de publicar:
+1. Abra o endereço no Google Chrome do Android.
+2. Toque no menu ⋮.
+3. Escolha "Instalar app" ou "Adicionar à tela inicial".
+4. Confirme. O ícone Meu Treino ficará na tela inicial.
+
+Publicação gratuita possível:
+- GitHub Pages (requer criar uma conta gratuita e publicar os arquivos).
+- Netlify (plano gratuito, sujeito aos limites do serviço).
+
+Para testar sem publicar, abra index.html em um navegador; alguns recursos de instalação/offline só funcionam via HTTPS.
+
+Os registros ficam armazenados no navegador/aparelho. Limpar os dados do navegador pode apagá-los; use "Exportar meus registros" para guardar uma cópia.
+
+Aviso: plano inicial genérico, não substitui avaliação profissional. Ajuste cargas, amplitude e exercícios conforme sua capacidade e equipamentos. Pare se sentir dor aguda.
